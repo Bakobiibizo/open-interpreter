@@ -22,7 +22,7 @@ from ABC import abstractmethod
 
 class InterpreterModel(BaseModel):
     
-       # State
+    # State
     messages: List
     _code_interpreters: Dict
 
@@ -50,17 +50,6 @@ class InterpreterModel(BaseModel):
     
     def __init__(self, **data):
         super().__init__(**data)
-    
-    # Load config defaults
-    config = self.get_configuration_file()
-    
-    #turns the config file contents into a dictionary for easy access
-    # should consider another method for setting these values rather than directly updating __dict__
-    __dict__.update(config)
-
-    def get_configuration_file(self) -> str:
-        """This method should be implemented in the concrete class and should return the config as a string."""
-        raise NotImplementedError("You must implement this method in the concrete class.")
 
 class InterpreterABC(ABC):
     @abstractmethod
@@ -77,7 +66,7 @@ class InterpreterABC(ABC):
         pass
 
     @abstractmethod
-     def _streaming_chat(self, message=None, display=True)-> None:
+    def _streaming_chat(self, message=None, display=True)-> None:
          """
          Yields tokens, but also adds them to interpreter.messages. TBH probably would be good to seperate those two responsibilities someday soon
          Responds until it decides not to run any more code or say anything else.
