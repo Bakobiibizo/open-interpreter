@@ -16,8 +16,7 @@ from datetime import datetime
 from ..utils.check_for_update import check_for_update
 from ..utils.display_markdown_message import display_markdown_message
 from pydantic import BaseModel
-from ABC import ABC
-from ABC import abstractmethod
+from abc import ABC, abstractmethod
 
 
 class InterpreterModel(BaseModel):
