@@ -21,7 +21,38 @@ from ABC import abstractmethod
 
 
 class InterpreterModel(BaseModel):
+    """
+    Pydantic data model to determine the configuration of the Interpreter
+
+    Args:
+        BaseModel: Pydantic data model
     
+    Returns:
+        InterpreterModel
+        
+    Attributes:
+        messages: List
+        _code_interpreters: Dict
+        local: bool
+        auto_run: bool
+        debug_mode: bool
+        max_output: int
+        conversation_history: bool
+        conversation_name: str
+        conversation_history_path: str
+        model: str
+        temperature: int
+        system_message: str
+        context_window: Union[str, None]
+        max_tokens: Union[int, None]
+        api_base: Union[str, None]
+        api_key: Union[str, None]
+        max_budget: Union[int, None]
+        _llm: Union[str, None]
+        
+    Methods:
+        __init__(self, **data):
+    """
     # State
     messages: List
     _code_interpreters: Dict
@@ -49,20 +80,44 @@ class InterpreterModel(BaseModel):
     _llm: Union[str, None]
     
     def __init__(self, **data):
+        """
+        Initializes a new instance of the class.
+
+        Args:
+            **data: The keyword arguments that will be passed to the parent class.
+
+        Returns:
+            None
+        """
         super().__init__(**data)
 
 class InterpreterABC(ABC):
     @abstractmethod
-    def cli(cls, **data: InterpterterModel(**data))-> None:
-        cli(cls, InterpterterModel(**data))
+    def __init__(self)-> None:
+        """
+        Abstract Base Class for the Interpreter Class
+        
+        Returns:
+            None
+
+        Yields:
+            None
+        """
         
     @abstractmethod
-    def __init__(cls)-> None:
-        "Along with setting the configuration it should also check for updates and that check should be pushed into the utility."
+    def cli(self)-> None:
+        """
+        A function that represents the command line interface (CLI) for this class.
 
+        :returns: None
+        """
+        cli(self)
     @abstractmethod
-    def chat(cls, message=None, display=bool, stream=bool)-> List[Dict[str, str]] :
-        "should handle all the chat functionality. consider breaking this into smaller function each responsible for inidivdual tasks."
+    def chat(self, message=None, display=bool, stream=bool)-> List[Dict[str, str]] :
+        """
+        should handle all the chat functionality. consider breaking this into smaller function each responsible for inidivdual tasks.
+        """
+        
         pass
 
     @abstractmethod
@@ -74,9 +129,16 @@ class InterpreterABC(ABC):
          pass
      
     def _respond(self) -> None:
+        """
+        This function is a private method named _respond.
+        It does not take any parameters.
+        It does not return anything.
+        """
         yield from respond(self)
         
     @abstractmethod
     def reset(self) -> None:
-        """Reset the state."""
+        """
+        Reset the state.
+        """
         pass
