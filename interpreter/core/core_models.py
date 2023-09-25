@@ -2,6 +2,10 @@
 This file defines the abstract base class and base model classes for the interpreter class. the abstract base class is used to define the types of functions that the interpreter class will have and the model defines how that model will interact with data. 
 It's the main file. `import interpreter` will import an instance of this class.
 """
+import appdirs
+import os
+import json
+from typing import List, Union, Dict, Any
 from interpreter.utils import display_markdown_message
 from ..cli.cli import cli
 from ..utils.get_config import get_config
@@ -9,9 +13,7 @@ from .respond import respond
 from ..llm.setup_llm import setup_llm
 from ..terminal_interface.terminal_interface import terminal_interface
 from ..terminal_interface.validate_llm_settings import validate_llm_settings
-import appdirs
-import os
-import json
+
 from datetime import datetime
 from ..utils.check_for_update import check_for_update
 from ..utils.display_markdown_message import display_markdown_message
@@ -69,7 +71,7 @@ class InterpreterModel(BaseModel):
 
     # LLM settings
     model: str
-    temperature: int
+    temperature: float
     system_message: str
     context_window: Union[str, None]
     max_tokens: Union[int, None]
@@ -78,17 +80,6 @@ class InterpreterModel(BaseModel):
     max_budget: Union[int, None]
     _llm: Union[str, None]
     
-    def __init__(self, **data):
-        """
-        Initializes a new instance of the class.
-
-        Args:
-            **data: The keyword arguments that will be passed to the parent class.
-
-        Returns:
-            None
-        """
-        super().__init__(**data)
 
 class InterpreterABC(ABC):
     @abstractmethod

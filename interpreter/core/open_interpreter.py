@@ -4,10 +4,9 @@ import loguru
 import appdirs
 
 from datetime import datetime, tzinfo
-from pathlib import Path
 from dotenv import load_dotenv
 from typing import Union, Callable, Any, List, Dict
-
+from pathlib import Path
 from interpreter.core.core_models import InterpreterABC, InterpreterModel
 from interpreter.core.respond import respond
 from interpreter.cli.cli import cli
@@ -17,24 +16,22 @@ from interpreter.llm.setup_llm import setup_llm
 from interpreter.terminal_interface.terminal_interface import terminal_interface
 from interpreter.terminal_interface.validate_llm_settings import validate_llm_settings
 
-path = Path(__file__).resolve().parent
-
+path = Path
 load_dotenv()
 
 logger = loguru.logger
 
-cwd = path.cwd().absolute()
     
 def default_interpreter_config(    
-        messages: Union[List[Dict[str, str]], None]=None,
-        _code_interpreter: Union[Dict[str, str], None]=None,
+        messages: Union[List[Dict[str, str]], None]=[],
+        _code_interpreter: Union[Dict[str, str], None]={},
         local: bool=False,
         auto_run: bool=False,
         debug_mode: bool=False,
         max_output: int=2000,
         conversation_history: bool=True,
-        conversation_name: Callable[[tzinfo | None], datetime]=datetime.now,
-        conversation_history_path: Path=cwd / appdirs.user_data_dir("Open Interpreter") / "conversations",
+        conversation_name: Callable[[tzinfo | None], datetime]=datetime.now().strftime("%B_%d_%Y_%H-%M-%S"),
+        conversation_history_path: str = str(path.cwd() / appdirs.user_data_dir("Open Interpreter") / "conversations"),
         model: str= "gpt-3.5-turbo",
         temperature: float=1.5,
         system_message: str="",
@@ -91,27 +88,27 @@ def default_interpreter_config(
     }
 
 class OpenInterpreter(InterpreterABC):
-    def __init__(self, data: InterpreterModel=InterpreterModel(**default_interpreter_config())) -> None:
+    def __init__(self, data: InterpreterModel=default_interpreter_config()) -> None:
         logger.info("> OpenInterpreter.__init__")
-        super().__init__(**data)
-        self.messages = data.messages
-        self._code_interpreters = data._code_interpreters
-        self.local = data.local
-        self.auto_run = data.auto_run
-        self.debug_mode = data.debug_mode
-        self.max_output = data.max_output
-        self.conversation_history = data.conversation_history
-        self.conversation_name = data.conversation_name
-        self.conversation_history_path = data.conversation_history_path
-        self.model = data.model
-        self.temperature = data.temperature
-        self.system_message = data.system_message
-        self.context_window = data.context_window
-        self.max_tokens = data.max_tokens
-        self.api_base = data.api_base
-        self.api_key = data.api_key
-        self.max_budget = data.max_budget
-        self._llm = data._llm
+        super().__init__()
+        self.messages = data["messages"]
+        self._code_interpreters = data["_code_interpreters"]
+        self.local = data["local"]
+        self.auto_run = data["auto_run"]
+        self.debug_mode = data["debug_mode"]
+        self.max_output = data["max_output"]
+        self.conversation_history = data["conversation_history"]
+        self.conversation_name = data["conversation_name"]
+        self.conversation_history_path = data["conversation_history_path"]
+        self.model = data["model"]
+        self.temperature = data["temperature"]
+        self.system_message = data["system_message"]
+        self.context_window = data["context_window"]
+        self.max_tokens = data["max_tokens"]
+        self.api_base = data["api_base"]
+        self.api_key = data["api_key"]
+        self.max_budget = data["max_budget"]
+        self._llm = data["_llm"]
         # Check for update
         if not self.local:
             # This should actually be pushed into the utility
