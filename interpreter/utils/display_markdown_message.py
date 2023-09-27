@@ -6,12 +6,12 @@ from rich.rule import Rule
 def display_markdown_message(message):
     """
     Display markdown message. Works with multiline strings with lots of
-indentation.
+    indentation.
     Will automatically make single line > tags beautiful.
     """
-
-for line in message.split("\n"):
-    line = line.strip()
+    line = ""
+    for line in message.split("\n"):
+        line = line.strip()
     if line == "":
         print("")
     elif line == "---":
@@ -23,9 +23,9 @@ for line in message.split("\n"):
         except UnicodeEncodeError:
             # If a UnicodeEncodeError is encountered, print the line without Markdown formatting adding this for windows compatibility
             print(line)
-        except Exception as e:
+        except RuntimeError as error:
             # For any other exceptions, print the exception and the li causing it
-            print(f"An error occurred while printing the following line\n{line}\nError: {str(e)}")
+            print(f"An error occurred while printing the following line\n{line}\nError: {str(error)}")
 
     if "\n" not in message and message.startswith(">"):
         # Aesthetic choice. For these tags, they need a space below them
