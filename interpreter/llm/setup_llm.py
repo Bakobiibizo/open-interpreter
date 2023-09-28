@@ -15,9 +15,6 @@ def setup_llm(interpreter):
     if (not interpreter.local
         and (interpreter.model in litellm.open_ai_chat_completion_models or interpreter.model.startswith("azure/"))):
         # Function calling LLM
-        coding_llm = setup_openai_coding_llm(interpreter)
-    else:
-        text_llm = setup_text_llm(interpreter)
-        coding_llm = convert_to_coding_llm(text_llm, debug_mode=interpreter.debug_mode)
-
-    return coding_llm
+        return setup_openai_coding_llm(interpreter)
+    text_llm = setup_text_llm(interpreter)
+    return convert_to_coding_llm(text_llm, debug_mode=interpreter.debug_mode)

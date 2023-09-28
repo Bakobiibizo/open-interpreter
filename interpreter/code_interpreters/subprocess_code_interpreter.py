@@ -66,7 +66,7 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
         except:
             yield {"output": traceback.format_exc()}
             return
-            
+
 
         while retry_count <= max_retries:
             if self.debug_mode:
@@ -100,8 +100,7 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
             else:
                 time.sleep(0.1)
             try:
-                output = self.output_queue.get(timeout=0.3)  # Waits for 0.3 seconds
-                yield output
+                yield self.output_queue.get(timeout=0.3)
             except queue.Empty:
                 if self.done.is_set():
                     # Try to yank 3 more times from it... maybe there's something in there...
